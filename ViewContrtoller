@@ -1,0 +1,45 @@
+//
+//  ViewController.swift
+//  APIGetCalls
+//
+//  Created by Jeffrey Seaman on 2/13/20.
+//  Copyright © 2020 PPU. All rights reserved.
+//
+
+import UIKit
+
+struct faqs: Decodable {
+    let Question: String
+    let Category: String
+    let Answer: String
+}
+
+
+class ViewController: UIViewController {
+
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        // Do any additional setup after loading the view.
+        
+        let url = "http://localhost:3008/faq"
+        //let url = "https://jsonplaceholder.typicode.com/todos"
+        let urlObj = URL(string: url)
+        
+        URLSession.shared.dataTask(with: urlObj!) {(data, response, error) in
+            
+            do {
+                
+                let faq = try JSONDecoder().decode([faqs].self,
+                                   from: data!)
+                for faqs in faq {
+                    print(faqs.Question + ": " + faqs.Category + ": " + faqs.Answer)
+                }
+            } catch {
+                print("We messed it up")
+            }
+        }.resume()
+        
+    }
+
+
+}
